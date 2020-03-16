@@ -6,8 +6,6 @@ import com.example.techcrunchpostapi.model.BasePost
 import com.example.techcrunchpostapi.model.Content
 import com.example.techcrunchpostapi.model.Excerpt
 import com.example.techcrunchpostapi.model.Title
-import com.example.techcrunchpostapi.network.RetrofitInstance
-import com.example.techcrunchpostapi.network.Webservice
 import com.example.techcrunchpostapi.repository.PostRepository
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
@@ -15,39 +13,31 @@ import com.nhaarman.mockitokotlin2.verify
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.verify
 import io.reactivex.Single
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import org.junit.runners.BlockJUnit4ClassRunner
-import org.mockito.ArgumentMatchers
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
-import java.lang.RuntimeException
 
 @RunWith(MockitoJUnitRunner::class)
-class PostViewModelTest{
+class PostViewModelTest {
 
     @Rule
     @JvmField
-    var rule:TestRule = InstantTaskExecutorRule()
+    var rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var viewModel: PostViewModel
 
     @MockK
-    private lateinit var repository:PostRepository
+    private lateinit var repository: PostRepository
     private var postobserver: Observer<List<BasePost>> = mock()
-    private var errorobserver:Observer<String> = mock()
-    private var errormsg ="no data found"
+    private var errorobserver: Observer<String> = mock()
+    private var errormsg = "no data found"
 
     @Before
-    fun setUp(){
+    fun setUp() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         viewModel = PostViewModel(repository)
         viewModel.post.observeForever(postobserver)
@@ -64,12 +54,17 @@ class PostViewModelTest{
     }
 
     @Test
-    fun `when Api call is successful, it returns data`(){
-        val listOfPost= listOf(BasePost(0,"a","a","a","a","a","a","a","a",Title("a"), Content("a",true),
-            Excerpt("a",true)),
-            BasePost(1,"b","b","b","b","b","b","b","b",Title("b"), Content("b",true),
-                Excerpt("b",false)
-        ))
+    fun `when Api call is successful, it returns data`() {
+        val listOfPost = listOf(
+            BasePost(
+                0, "a", "a", "a", "a", "a", "a", "a", "a", Title("a"), Content("a", true),
+                Excerpt("a", true)
+            ),
+            BasePost(
+                1, "b", "b", "b", "b", "b", "b", "b", "b", Title("b"), Content("b", true),
+                Excerpt("b", false)
+            )
+        )
         every { repository.getPostInfo() } returns (Single.just(listOfPost))
         viewModel.getPost()
         verify(postobserver).onChanged(listOfPost)
@@ -77,7 +72,7 @@ class PostViewModelTest{
     }
 
     @Test
-    fun `when Api call is failure, it returns error`(){
+    fun `when Api call is failure, it returns error`() {
         every { repository.getPostInfo() } returns Single.error(RuntimeException(errormsg))
         viewModel.getPost()
         verify(errorobserver).onChanged(errormsg)
