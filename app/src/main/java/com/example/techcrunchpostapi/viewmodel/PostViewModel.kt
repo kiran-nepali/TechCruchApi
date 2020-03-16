@@ -20,4 +20,9 @@ class PostViewModel(val repository: PostRepository) : ViewModel() {
             })
         )
     }
+
+    override fun onCleared() {
+        disposable.clear()
+        super.onCleared()
+    }
 }
