@@ -31,8 +31,8 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 import java.lang.RuntimeException
 
-@RunWith(BlockJUnit4ClassRunner::class)
-class PostViewModelTest:BaseTest(){
+@RunWith(MockitoJUnitRunner::class)
+class PostViewModelTest{
 
     @Rule
     @JvmField
@@ -82,4 +82,5 @@ class PostViewModelTest:BaseTest(){
         viewModel.getPost()
         verify(errorobserver).onChanged(errormsg)
     }
+
 }
