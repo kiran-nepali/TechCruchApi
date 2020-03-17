@@ -1,7 +1,9 @@
 package com.example.techcrunchpostapi.ui
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +34,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun postAdaper(post: List<BasePost>) {
-        val adapter = PostAdapter(post)
+        val adapter = PostAdapter(post,object :OnPostClickListener{
+            override fun onclick(post: BasePost) {
+                CustomTabsIntent.Builder().build().launchUrl(this@MainActivity, Uri.parse(post.link))
+            }
+        })
         rv_post.layoutManager = LinearLayoutManager(this)
         rv_post.adapter = adapter
     }

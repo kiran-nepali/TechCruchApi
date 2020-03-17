@@ -55,4 +55,5 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation 'android.arch.core:core-testing:1.1.1'
     testImplementation "io.mockk:mockk:1.9.3.kotlin12"
+    implementation 'androidx.browser:browser:1.2.0'
 }
